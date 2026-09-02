@@ -1,1 +1,134 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VISORA</title><link rel="stylesheet" href="style.css"></head><body><header><h1>VISORA</h1><div>Vision & Optical Recommendation Assistant</div><nav><a href="index.html">Home</a><a href="find.html">Find My Frame</a><a href="login.html">Optometrist Login</a><a href="privacy.html">Privacy & Ethics</a></nav></header><main><div class="card"><h2>Optometrist-in-the-Loop Multi-Factor Optical Recommendation System</h2><p><b>AI recommends — Optometrist evaluates — Patient chooses.</b></p><div><span class="step">1 Patient Profile</span><span class="step">2 AI Analysis</span><span class="step">3 Recommendations</span><span class="step">4 Optometrist Review</span><span class="step">5 Final Recommendation</span></div><p>VISORA combines photo, lifestyle, occupation, visual task, personal style, cosmetic appearance, preferred frame colour and budget to generate a demonstration frame recommendation.</p><a class="btn" href="find.html">Start Find My Frame</a></div><div class="grid"><div class="card"><h3>Multi-factor</h3><p>Balances functional and cosmetic preferences.</p></div><div class="card"><h3>Explainable</h3><p>Shows why each frame is recommended.</p></div><div class="card"><h3>Human oversight</h3><p>Optometrist reviews the AI output before final recommendation.</p></div></div></main><footer>Academic prototype — not a replacement for refraction, clinical assessment or professional judgement.</footer></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VISORA | Optical Recommendation System</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}header{background:#173b57;color:#fff;padding:20px;text-align:center}header h1{margin:0 0 6px;font-size:28px}header p{margin:0;opacity:.9}.container{max-width:1000px;margin:25px auto;padding:0 16px}.card{background:#fff;border-radius:16px;padding:24px;margin-bottom:20px;box-shadow:0 4px 18px #00000012}h2{margin-top:0;color:#173b57}.login{max-width:480px;margin:45px auto}.field{margin:14px 0}label{display:block;font-weight:bold;margin-bottom:7px}input,select{width:100%;padding:13px;border:1px solid #ccd3dc;border-radius:9px;font-size:16px;background:#fff}button{border:0;border-radius:9px;padding:12px 18px;font-size:16px;font-weight:bold;cursor:pointer;background:#1f8f4c;color:#fff;margin:5px 4px 5px 0}button.secondary{background:#52657a}button.danger{background:#b83232}.error{color:#b83232;background:#fff0f0;padding:10px;border-radius:8px;margin-top:10px;display:none}.success{color:#176b3a;background:#eaf8ef;padding:12px;border-radius:8px;margin:10px 0;display:none}.stepper{display:flex;gap:6px;overflow:auto;margin-bottom:20px}.step{flex:1;min-width:130px;padding:10px;text-align:center;border-radius:8px;background:#e4e9ef;color:#536171}.step.active{background:#173b57;color:#fff}.section{display:none}.section.active{display:block}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.frame-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.frame{border:1px solid #d7dce3;border-radius:12px;padding:16px}.frame h3{margin:0 0 8px}.score{font-size:20px;font-weight:bold;color:#1f8f4c}.note{font-size:13px;color:#667085}.result{border-left:5px solid #1f8f4c;background:#f4fbf6;padding:16px;border-radius:8px}.hidden{display:none!important}@media(max-width:700px){.grid,.frame-grid{grid-template-columns:1fr}header h1{font-size:23px}.container{margin-top:15px}}
+</style>
+</head>
+<body>
+<header><h1>VISORA</h1><p>Vision & Optical Recommendation Assistant</p></header>
+
+<div class="container">
+<div id="loginScreen" class="card login">
+<h2>Optometrist Login</h2>
+<p>Demo website login</p>
+<form id="loginForm">
+<div class="field"><label for="username">Username</label><input id="username" autocomplete="username" value="optometrist" required></div>
+<div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" value="demo123" required></div>
+<button type="submit">Login</button>
+<div id="loginError" class="error">Incorrect username or password.</div>
+</form>
+<p class="note">Demo credentials: <b>optometrist</b> / <b>demo123</b></p>
+</div>
+
+<div id="app" class="hidden">
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><h2 style="margin-bottom:4px">VISORA Dashboard</h2><span class="note">AI recommends — Optometrist evaluates — Patient chooses.</span></div><button class="danger" type="button" id="logoutBtn">Logout</button></div>
+</div>
+
+<div class="stepper">
+<div class="step active" data-step="1">1. Patient Profile</div><div class="step" data-step="2">2. AI Analysis</div><div class="step" data-step="3">3. Recommendations</div><div class="step" data-step="4">4. Optometrist Review</div><div class="step" data-step="5">5. Final</div>
+</div>
+
+<section id="section1" class="card section active">
+<h2>Patient Profile</h2>
+<div class="grid">
+<div class="field"><label>Patient name</label><input id="patientName" placeholder="Enter patient name"></div>
+<div class="field"><label>Age</label><input id="age" type="number" min="1" max="120" placeholder="Age"></div>
+<div class="field"><label>Lifestyle</label><select id="lifestyle"><option>Balanced / General</option><option>Active / Sports</option><option>Outdoor</option><option>Office / Indoor</option><option>Social / Fashion</option></select></div>
+<div class="field"><label>Occupation</label><select id="occupation"><option>Student</option><option>Office / Computer</option><option>Healthcare</option><option>Driver</option><option>Outdoor Worker</option><option>Other</option></select></div>
+<div class="field"><label>Visual task</label><select id="visualTask"><option>General distance and near</option><option>Computer / Digital screen</option><option>Reading / Near work</option><option>Driving</option><option>Outdoor / Distance</option></select></div>
+<div class="field"><label>Personal style</label><select id="style"><option>Classic</option><option>Minimal</option><option>Modern</option><option>Sporty</option><option>Bold</option></select></div>
+<div class="field"><label>Cosmetic appearance</label><select id="cosmetic"><option>Natural</option><option>Professional</option><option>Stylish</option><option>Subtle</option><option>Statement</option></select></div>
+<div class="field"><label>Preferred frame colour</label><select id="colour"><option>Black</option><option>Brown</option><option>Blue</option><option>Clear</option><option>Metallic</option></select></div>
+<div class="field"><label>Budget</label><select id="budget"><option>Low</option><option>Medium</option><option>High</option></select></div>
+</div>
+<div class="field"><label>Patient photo (optional for this prototype)</label><input id="photo" type="file" accept="image/*"></div>
+<div id="photoStatus" class="note"></div>
+<button type="button" id="analyzeBtn">Run VISORA Analysis</button>
+</section>
+
+<section id="section2" class="card section">
+<h2>AI Analysis</h2>
+<div id="analysisResult" class="result"></div>
+<button type="button" class="secondary" id="back1">Back</button><button type="button" id="toRecommendations">View Recommendations</button>
+</section>
+
+<section id="section3" class="card section">
+<h2>Frame Recommendations</h2>
+<p class="note">Demonstration recommendations based on the selected preferences. They are not a clinical prescription or diagnosis.</p>
+<div id="frameResults" class="frame-grid"></div>
+<button type="button" class="secondary" id="back2">Back</button><button type="button" id="toReview">Send to Optometrist Review</button>
+</section>
+
+<section id="section4" class="card section">
+<h2>Optometrist Review</h2>
+<div id="reviewSummary" class="result"></div>
+<p><b>Clinical review:</b> Confirm frame choice against refraction, binocular vision, occupational requirements, fitting parameters, patient comfort and professional judgement.</p>
+<button type="button" class="secondary" id="back3">Back</button><button type="button" id="approveBtn">Approve Recommendation</button><button type="button" class="secondary" id="modifyBtn">Modify</button><button type="button" class="danger" id="rejectBtn">Reject</button>
+<div id="reviewMessage" class="success"></div>
+</section>
+
+<section id="section5" class="card section">
+<h2>Final Recommendation</h2>
+<div id="finalResult" class="result"></div>
+<p class="note">VISORA is a prototype clinical decision-support concept. Final spectacle selection must be made by a qualified optometrist after appropriate clinical assessment.</p>
+<button type="button" id="printBtn">Print / Save PDF</button><button type="button" class="secondary" id="newPatientBtn">New Patient</button>
+</section>
+
+<div class="card"><h2>Privacy & Ethics</h2><p>VISORA follows a privacy-by-design concept: collect only necessary information, obtain consent before using patient photos/data, restrict access to authorised users, provide deletion/withdrawal options, and keep the optometrist in control of the final decision.</p><p class="note">This front-end demonstration does not provide real clinical AI, secure server storage, or production authentication.</p></div>
+</div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var currentStep=1, selectedFrame='';
+var frames=[
+{name:'Aero Oval Pro',style:'Modern',colour:'Black',budget:'Medium',task:'General distance and near',desc:'Balanced oval profile for a versatile everyday appearance.'},
+{name:'Classic Round Light',style:'Classic',colour:'Brown',budget:'Low',task:'Reading / Near work',desc:'Lightweight classic design suited to a traditional look.'},
+{name:'Urban Rectangle',style:'Professional',colour:'Black',budget:'Medium',task:'Computer / Digital screen',desc:'Professional rectangular profile for office and digital work.'},
+{name:'Active Flex',style:'Sporty',colour:'Blue',budget:'Medium',task:'Outdoor / Distance',desc:'Sport-oriented option for active lifestyles.'},
+{name:'Minimal Air',style:'Minimal',colour:'Clear',budget:'Low',task:'Computer / Digital screen',desc:'Subtle lightweight appearance for a minimalist preference.'},
+{name:'Bold Studio',style:'Bold',colour:'Metallic',budget:'High',task:'General distance and near',desc:'Statement frame for fashion-forward preferences.'}
+];
+function $(id){return document.getElementById(id)}
+function showStep(n){
+currentStep=n;
+for(var i=1;i<=5;i++){var s=$('section'+i);if(s)s.classList.toggle('active',i===n)}
+var steps=document.querySelectorAll('.step');steps.forEach(function(x){x.classList.toggle('active',Number(x.getAttribute('data-step'))===n)});
+window.scrollTo({top:0,behavior:'smooth'});
+}
+function val(id){return $(id).value}
+function scoreFrame(f){var score=50;if(f.style===val('style'))score+=18;if(f.colour===val('colour'))score+=12;if(f.budget===val('budget'))score+=10;if(f.task===val('visualTask'))score+=10;if(val('lifestyle')==='Active / Sports'&&f.style==='Sporty')score+=5;if(val('occupation')==='Office / Computer'&&f.task==='Computer / Digital screen')score+=5;if(val('cosmetic')==='Statement'&&f.style==='Bold')score+=5;if(val('cosmetic')==='Subtle'&&f.style==='Minimal')score+=5;return Math.min(99,score)}
+function analyse(){
+var name=val('patientName')||'Patient';
+$('analysisResult').innerHTML='<b>Patient:</b> '+escapeHtml(name)+'<br><br><b>Profile:</b> '+escapeHtml(val('lifestyle'))+', '+escapeHtml(val('occupation'))+', visual task: '+escapeHtml(val('visualTask'))+'.<br><b>Style:</b> '+escapeHtml(val('style'))+' | Cosmetic: '+escapeHtml(val('cosmetic'))+' | Colour: '+escapeHtml(val('colour'))+' | Budget: '+escapeHtml(val('budget'))+'<br><br><b>AI interpretation:</b> The system prioritises the patient’s functional task, lifestyle, style, cosmetic preference, colour and budget to rank suitable demonstration frames.';
+var ranked=frames.map(function(f){return {f:f,score:scoreFrame(f)}}).sort(function(a,b){return b.score-a.score});
+$('frameResults').innerHTML=ranked.slice(0,3).map(function(x,i){return '<div class="frame"><h3>#'+(i+1)+' '+x.f.name+'</h3><div class="score">'+x.score+'% match</div><p>'+x.f.desc+'</p><p class="note">Style: '+x.f.style+'<br>Colour: '+x.f.colour+'<br>Budget: '+x.f.budget+'</p></div>'}).join('');
+selectedFrame=ranked[0].f.name;
+$('reviewSummary').innerHTML='<b>Top AI recommendation:</b> '+escapeHtml(selectedFrame)+'<br><br><b>Reason:</b> Highest demonstration score across the selected multi-factor profile.';
+showStep(2);
+}
+function escapeHtml(x){return String(x).replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})}
+$('loginForm').addEventListener('submit',function(e){e.preventDefault();var u=$('username').value.trim(),p=$('password').value;if(u==='optometrist'&&p==='demo123'){$('loginScreen').classList.add('hidden');$('app').classList.remove('hidden');$('loginError').style.display='none';showStep(1)}else{$('loginError').style.display='block'}});
+$('logoutBtn').addEventListener('click',function(){$('app').classList.add('hidden');$('loginScreen').classList.remove('hidden');$('password').value='demo123';showStep(1)});
+$('analyzeBtn').addEventListener('click',analyse);
+$('back1').addEventListener('click',function(){showStep(1)});
+$('toRecommendations').addEventListener('click',function(){showStep(3)});
+$('back2').addEventListener('click',function(){showStep(2)});
+$('toReview').addEventListener('click',function(){showStep(4)});
+$('back3').addEventListener('click',function(){showStep(3)});
+$('approveBtn').addEventListener('click',function(){$('reviewMessage').textContent='Recommendation approved by the optometrist for this demonstration.';$('reviewMessage').style.display='block';$('finalResult').innerHTML='<b>Status:</b> APPROVED<br><br><b>Final frame:</b> '+escapeHtml(selectedFrame)+'<br><b>Patient:</b> '+escapeHtml(val('patientName')||'Patient')+'<br><b>Reviewed by:</b> Optometrist';showStep(5)});
+$('modifyBtn').addEventListener('click',function(){selectedFrame=prompt('Enter modified frame name:',selectedFrame)||selectedFrame;$('reviewMessage').textContent='Recommendation modified. Please verify the modified choice clinically.';$('reviewMessage').style.display='block';$('finalResult').innerHTML='<b>Status:</b> MODIFIED<br><br><b>Final frame:</b> '+escapeHtml(selectedFrame)+'<br><b>Patient:</b> '+escapeHtml(val('patientName')||'Patient')+'<br><b>Reviewed by:</b> Optometrist';showStep(5)});
+$('rejectBtn').addEventListener('click',function(){$('reviewMessage').textContent='AI recommendation rejected. No frame recommendation has been approved.';$('reviewMessage').style.display='block';$('finalResult').innerHTML='<b>Status:</b> REJECTED<br><br>No AI frame recommendation approved.';showStep(5)});
+$('printBtn').addEventListener('click',function(){window.print()});
+$('newPatientBtn').addEventListener('click',function(){document.querySelectorAll('input').forEach(function(x){if(x.id!=='username'&&x.id!=='password'&&x.type!=='file')x.value=''});$('reviewMessage').style.display='none';showStep(1)});
+$('photo').addEventListener('change',function(){var f=this.files[0];if(!f){$('photoStatus').textContent='';return}var img=new Image();img.onload=function(){var pixels=img.width*img.height;var quality=pixels>=1000000?'Good':pixels>=300000?'Moderate':'Poor';$('photoStatus').textContent='Photo quality check: '+quality+' ('+img.width+' × '+img.height+' px). Prototype check only.'};img.src=URL.createObjectURL(f)});
+})();
+</script>
+</body>
+</html>

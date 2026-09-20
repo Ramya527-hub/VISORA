@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>VISORA App</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f5f7fb;
+ color:#172033;
+}
+header{
+ background:#111827;
+ color:white;
+ padding:22px 18px;
+ text-align:center;
+}
+header h1{margin:0;font-size:28px}
+header p{margin:6px 0 0;font-size:13px;opacity:.8}
+
+main{padding:16px;padding-bottom:90px}
+.screen{display:none}
+.screen.active{display:block}
+
+.card{
+ background:white;
+ border-radius:18px;
+ padding:18px;
+ margin-bottom:15px;
+ box-shadow:0 4px 15px rgba(0,0,0,.07);
+}
+
+h2{margin-top:0}
+h3{margin-bottom:6px}
+
+button{
+ border:0;
+ border-radius:12px;
+ padding:13px 16px;
+ font-size:15px;
+ font-weight:bold;
+ cursor:pointer;
+}
+.primary{
+ background:#111827;
+ color:white;
+ width:100%;
+ margin-top:10px;
+}
+.secondary{
+ background:#e9edf5;
+ color:#111827;
+}
+input,select{
+ width:100%;
+ padding:13px;
+ margin:7px 0 12px;
+ border:1px solid #d7dce5;
+ border-radius:10px;
+ font-size:15px;
+}
+
+.menu{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+}
+.menu button{
+ min-height:90px;
+ background:white;
+ border:1px solid #e2e6ed;
+}
+
+.photo{
+ width:100%;
+ max-height:260px;
+ object-fit:cover;
+ border-radius:14px;
+ margin-top:10px;
+ display:none;
+}
+
+.frame{
+ border:1px solid #e1e5ec;
+ border-radius:15px;
+ padding:14px;
+ margin-top:12px;
+}
+
+.frame .shape{
+ height:90px;
+ border:5px solid #222;
+ border-radius:30px;
+ margin-bottom:10px;
+}
+
+.tag{
+ display:inline-block;
+ padding:5px 9px;
+ border-radius:20px;
+ background:#eef1f6;
+ font-size:12px;
+ margin:3px;
+}
+
+nav{
+ position:fixed;
+ bottom:0;
+ left:0;
+ right:0;
+ background:white;
+ border-top:1px solid #ddd;
+ display:flex;
+ justify-content:space-around;
+ padding:8px 3px;
+ z-index:5;
+}
+nav button{
+ background:white;
+ font-size:11px;
+ padding:8px 5px;
+}
+.small{font-size:12px;color:#687386}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>VISORA</h1>
+<p>Smart Optical Frame Recommendation</p>
+</header>
+
+<main>
+
+<!-- HOME -->
+<section id="home" class="screen active">
+<div class="card">
+<h2>Welcome to VISORA 👓</h2>
+<p>
+An optometrist-in-the-loop multi-factor optical recommendation system.
+</p>
+<button class="primary" onclick="show('find')">
+Find My Frame
+</button>
+</div>
+
+<div class="menu">
+<button onclick="show('find')">📷<br>Find My Frame</button>
+<button onclick="show('saved')">❤️<br>Saved Frames</button>
+<button onclick="show('recommend')">👓<br>Recommendations</button>
+<button onclick="show('doctor')">👨‍⚕️<br>Optometrist</button>
+</div>
+</section>
+
+
+<!-- FIND MY FRAME -->
+<section id="find" class="screen">
+<div class="card">
+<h2>Find My Frame</h2>
+
+<label>Patient name</label>
+<input id="name" placeholder="Enter name">
+
+<label>Age</label>
+<input id="age" type="number" placeholder="Age">
+
+<label>Upload face photo</label>
+<input id="photo" type="file" accept="image/*">
+<img id="preview" class="photo">
+
+<label>Lifestyle</label>
+<select id="life">
+<option>Student</option>
+<option>Office / Computer work</option>
+<option>Outdoor</option>
+<option>Active / Sports</option>
+<option>Mixed lifestyle</option>
+</select>
+
+<label>Occupation</label>
+<select id="occupation">
+<option>Student</option>
+<option>Healthcare</option>
+<option>IT / Computer</option>
+<option>Business</option>
+<option>Teacher</option>
+<option>Other</option>
+</select>
+
+<label>Visual task</label>
+<select id="visual">
+<option>Near work</option>
+<option>Distance work</option>
+<option>Computer work</option>
+<option>Driving</option>
+<option>Mixed visual tasks</option>
+</select>
+
+<label>Personal style</label>
+<select id="style">
+<option>Minimal</option>
+<option>Classic</option>
+<option>Professional</option>
+<option>Trendy</option>
+<option>Bold</option>
+</select>
+
+<label>Cosmetic preference</label>
+<select id="cosmetic">
+<option>Natural</option>
+<option>Professional</option>
+<option>Fashionable</option>
+<option>Statement look</option>
+</select>
+
+<label>Preferred frame colour</label>
+<select id="colour">
+<option>Black</option>
+<option>Brown</option>
+<option>Gold</option>
+<option>Silver</option>
+<option>Transparent</option>
+<option>Any colour</option>
+</select>
+
+<label>Budget</label>
+<select id="budget">
+<option>Below ₹2,000</option>
+<option>₹2,000–₹5,000</option>
+<option>₹5,000–₹10,000</option>
+<option>Above ₹10,000</option>
+</select>
+
+<button class="primary" onclick="analyze()">
+🤖 Analyse & Recommend
+</button>
+</div>
+</section>
+
+
+<!-- ANALYSIS -->
+<section id="analysis" class="screen">
+<div class="card">
+<h2>AI Analysis</h2>
+<div id="analysisText">
+Analysis will appear here.
+</div>
+<button class="primary" onclick="show('recommend')">
+View Frame Recommendations
+</button>
+</div>
+</section>
+
+
+<!-- RECOMMENDATIONS -->
+<section id="recommend" class="screen">
+<div class="card">
+<h2>Frame Recommendations</h2>
+<p class="small">
+Prototype recommendations based on the entered preferences.
+</p>
+<div id="frames"></div>
+</div>
+</section>
+
+
+<!-- COMPARE -->
+<section id="compare" class="screen">
+<div class="card">
+<h2>Compare Frames</h2>
+<div id="compareBox">
+<p class="small">Select frames from Recommendations to compare.</p>
+</div>
+</div>
+</section>
+
+
+<!-- SAVED -->
+<section id="saved" class="screen">
+<div class="card">
+<h2>❤️ Saved Frames</h2>
+<div id="savedBox"></div>
+</div>
+</section>
+
+
+<!-- OPTOMETRIST -->
+<section id="doctor" class="screen">
+<div class="card">
+<h2>👨‍⚕️ Optometrist Portal</h2>
+
+<label>Username</label>
+<input id="docUser" placeholder="Username">
+
+<label>Password</label>
+<input id="docPass" type="password" placeholder="Password">
+
+<button class="primary" onclick="doctorLogin()">
+Login
+</button>
+
+<div id="doctorResult"></div>
+</div>
+</section>
+
+</main>
+
+
+<nav>
+<button onclick="show('home')">🏠<br>Home</button>
+<button onclick="show('find')">📷<br>Find</button>
+<button onclick="show('recommend')">👓<br>Frames</button>
+<button onclick="show('saved')">❤️<br>Saved</button>
+<button onclick="show('doctor')">👨‍⚕️<br>Doctor</button>
+</nav>
+
+
+<script>
+
+let selected=[];
+let saved=JSON.parse(localStorage.getItem("visoraSaved")||"[]");
+
+function show(id){
+ document.querySelectorAll(".screen")
+ .forEach(x=>x.classList.remove("active"));
+
+ document.getElementById(id).classList.add("active");
+
+ if(id==="saved") renderSaved();
+ if(id==="compare") renderCompare();
+
+ window.scrollTo(0,0);
+}
+
+document.getElementById("photo").addEventListener("change",function(e){
+ const file=e.target.files[0];
+ if(!file)return;
+
+ const reader=new FileReader();
+
+ reader.onload=function(){
+  const img=document.getElementById("preview");
+  img.src=reader.result;
+  img.style.display="block";
+ };
+
+ reader.readAsDataURL(file);
+});
+
+
+function analyze(){
+
+ const name=document.getElementById("name").value || "Patient";
+ const life=document.getElementById("life").value;
+ const occupation=document.getElementById("occupation").value;
+ const visual=document.getElementById("visual").value;
+ const style=document.getElementById("style").value;
+ const cosmetic=document.getElementById("cosmetic").value;
+ const colour=document.getElementById("colour").value;
+ const budget=document.getElementById("budget").value;
+
+ document.getElementById("analysisText").innerHTML=`
+ <h3>Hello ${name} 👋</h3>
+ <p><b>Lifestyle:</b> ${life}</p>
+ <p><b>Occupation:</b> ${occupation}</p>
+ <p><b>Visual task:</b> ${visual}</p>
+ <p><b>Personal style:</b> ${style}</p>
+ <p><b>Cosmetic preference:</b> ${cosmetic}</p>
+ <p><b>Preferred colour:</b> ${colour}</p>
+ <p><b>Budget:</b> ${budget}</p>
+
+ <hr>
+
+ <p>
+ VISORA has processed the entered preferences and generated
+ frame recommendations for prototype demonstration.
+ </p>
+
+ <span class="tag">Lifestyle matched</span>
+ <span class="tag">Style matched</span>
+ <span class="tag">Budget considered</span>
+ `;
+
+ createFrames(style,colour,budget);
+ show("analysis");
+}
+
+
+function createFrames(style,colour,budget){
+
+ const data=[
+  {
+   id:1,
+   name:"Classic Rectangle",
+   type:"Rectangle",
+   reason:"Suitable for a professional and classic appearance."
+  },
+  {
+   id:2,
+   name:"Modern Round",
+   type:"Round",
+   reason:"Designed for a softer and contemporary appearance."
+  },
+  {
+   id:3,
+   name:"Professional Square",
+   type:"Square",
+   reason:"A structured frame option for a professional look."
+  },
+  {
+   id:4,
+   name:"Lightweight Oval",
+   type:"Oval",
+   reason:"A subtle everyday frame option."
+  }
+ ];
+
+ document.getElementById("frames").innerHTML=data.map(f=>`
+ <div class="frame">
+   <div class="shape"
+        style="border-radius:${f.type==="Round"?"50%":
+        f.type==="Oval"?"50%":"18px"}"></div>
+
+   <h3>${f.name}</h3>
+   <p>${f.reason}</p>
+
+   <span class="tag">${style}</span>
+   <span class="tag">${colour}</span>
+   <span class="tag">${budget}</span>
+
+   <br><br>
+
+   <button class="secondary"
+   onclick="saveFrame(${f.id},'${f.name}')">
+   ❤️ Save
+   </button>
+
+   <button class="secondary"
+   onclick="compareFrame(${f.id},'${f.name}')">
+   🔄 Compare
+   </button>
+ </div>
+ `).join("");
+}
+
+
+function saveFrame(id,name){
+
+ if(!saved.some(x=>x.id===id)){
+  saved.push({id,name});
+  localStorage.setItem("visoraSaved",JSON.stringify(saved));
+ }
+
+ alert(name+" saved.");
+}
+
+
+function renderSaved(){
+
+ const box=document.getElementById("savedBox");
+
+ if(saved.length===0){
+  box.innerHTML="<p>No saved frames yet.</p>";
+  return;
+ }
+
+ box.innerHTML=saved.map(x=>`
+ <div class="frame">
+ <h3>❤️ ${x.name}</h3>
+ <button class="secondary"
+ onclick="removeSaved(${x.id})">
+ Remove
+ </button>
+ </div>
+ `).join("");
+}
+
+
+function removeSaved(id){
+
+ saved=saved.filter(x=>x.id!==id);
+ localStorage.setItem("visoraSaved",JSON.stringify(saved));
+ renderSaved();
+}
+
+
+function compareFrame(id,name){
+
+ if(!selected.some(x=>x.id===id)){
+  if(selected.length>=3){
+   alert("You can compare up to 3 frames.");
+   return;
+  }
+
+  selected.push({id,name});
+ }
+
+ show("compare");
+}
+
+
+function renderCompare(){
+
+ const box=document.getElementById("compareBox");
+
+ if(selected.length===0){
+  box.innerHTML="<p>No frames selected.</p>";
+  return;
+ }
+
+ box.innerHTML=selected.map(x=>`
+ <div class="frame">
+ <h3>${x.name}</h3>
+ <p>Frame selected for comparison.</p>
+ </div>
+ `).join("");
+
+ box.innerHTML+=`
+ <button class="secondary"
+ onclick="selected=[];renderCompare()">
+ Clear comparison
+ </button>`;
+}
+
+
+function doctorLogin(){
+
+ const u=document.getElementById("docUser").value;
+ const p=document.getElementById("docPass").value;
+
+ if(u==="optometrist" && p==="demo123"){
+
+  document.getElementById("doctorResult").innerHTML=`
+  <div class="card">
+  <h3>Optometrist Dashboard</h3>
+  <p>Patient recommendations are ready for review.</p>
+
+  <button class="primary"
+  onclick="alert('Recommendation approved for prototype.')">
+  ✅ Approve
+  </button>
+
+  <button class="primary"
+  onclick="alert('Recommendation marked for modification.')">
+  ✏️ Modify
+  </button>
+
+  <button class="primary"
+  onclick="alert('Recommendation rejected for prototype.')">
+  ❌ Reject
+  </button>
+  </div>`;
+ }
+ else{
+  document.getElementById("doctorResult").innerHTML=
+  "<p style='color:red'>Incorrect login.</p>";
+ }
+}
+
+</script>
+
+</body>
+</html>
